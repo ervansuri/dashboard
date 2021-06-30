@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemadesigner version="6.5">
+<source>
+<database charset="latin1" collation="latin1_swedish_ci">formialt</database>
+</source>
+<canvas zoom="100">
+<tables>
+<table name="dpa" view="colnames">
+<left>661</left>
+<top>279</top>
+<width>95</width>
+<height>146</height>
+<sql_create_table>CREATE TABLE `dpa` (
+  `kd_dpa` int NOT NULL AUTO_INCREMENT,
+  `program` varchar(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+  `jumlah` double NOT NULL,
+  `year` year NOT NULL,
+  PRIMARY KEY (`kd_dpa`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1</sql_create_table>
+</table>
+<table name="identitas" view="colnames">
+<left>161</left>
+<top>342</top>
+<width>109</width>
+<height>180</height>
+<sql_create_table>CREATE TABLE `identitas` (
+  `kd_user` int(5) unsigned zerofill NOT NULL AUTO_INCREMENT,
+  `nama` varchar(255) DEFAULT NULL,
+  `alamat` varchar(255) DEFAULT NULL,
+  `kecamatan` varchar(100) DEFAULT NULL,
+  `kelurahan` varchar(100) DEFAULT NULL,
+  `dif` enum('a','b','c','d','e','f') DEFAULT NULL,
+  PRIMARY KEY (`kd_user`),
+  CONSTRAINT `identitas_ibfk_1` FOREIGN KEY (`kd_user`) REFERENCES `user` (`kd_user`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1</sql_create_table>
+</table>
+<table name="komponen" view="colnames">
+<left>1021</left>
+<top>117</top>
+<width>127</width>
+<height>163</height>
+<sql_create_table>CREATE TABLE `komponen` (
+  `kd_komponen` int NOT NULL AUTO_INCREMENT,
+  `nama` varchar(255) NOT NULL,
+  `spec` varchar(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci DEFAULT NULL,
+  `satuan` varchar(50) NOT NULL,
+  `harga` double NOT NULL,
+  PRIMARY KEY (`kd_komponen`)
+) ENGINE=InnoDB AUTO_INCREMENT=46 DEFAULT CHARSET=latin1</sql_create_table>
+</table>
+<table name="komponen_ring" view="colnames">
+<left>1253</left>
+<top>310</top>
+<width>127</width>
+<height>129</height>
+<sql_create_table>CREATE TABLE `komponen_ring` (
+  `kd_kr` int NOT NULL AUTO_INCREMENT,
+  `kd_komponen` int NOT NULL,
+  `kd_ring` varchar(17) NOT NULL,
+  PRIMARY KEY (`kd_komponen`,`kd_ring`,`kd_kr`),
+  KEY `kd_ring` (`kd_ring`),
+  KEY `kd_kr` (`kd_kr`),
+  CONSTRAINT `komponen_ring_ibfk_1` FOREIGN KEY (`kd_komponen`) REFERENCES `komponen` (`kd_komponen`),
+  CONSTRAINT `komponen_ring_ibfk_2` FOREIGN KEY (`kd_ring`) REFERENCES `ring` (`kd_ring`)
+) ENGINE=InnoDB AUTO_INCREMENT=45 DEFAULT CHARSET=latin1</sql_create_table>
+</table>
+<table name="perusahaan" view="colnames">
+<left>493</left>
+<top>518</top>
+<width>134</width>
+<height>231</height>
+<sql_create_table>CREATE TABLE `perusahaan` (
+  `kd_perusahaan` int(5) unsigned zerofill NOT NULL AUTO_INCREMENT,
+  `nama` varchar(255) NOT NULL,
+  `pic` varchar(255) NOT NULL,
+  `alamat` varchar(255) NOT NULL,
+  `tlp` varchar(25) NOT NULL,
+  `fax` varchar(25) DEFAULT NULL,
+  `email` varchar(100) DEFAULT NULL,
+  `npwp` int NOT NULL,
+  `ktp` int NOT NULL,
+  PRIMARY KEY (`kd_perusahaan`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1</sql_create_table>
+</table>
+<table name="ring" view="colnames">
+<left>1154</left>
+<top>610</top>
+<width>89</width>
+<height>129</height>
+<sql_create_table>CREATE TABLE `ring` (
+  `kd_ring` varchar(17) NOT NULL,
+  `p_ring` varchar(17) CHARACTER SET latin1 COLLATE latin1_swedish_ci DEFAULT NULL,
+  `nama` varchar(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+  PRIMARY KEY (`kd_ring`),
+  KEY `kd_ring` (`kd_ring`),
+  KEY `p_ring` (`p_ring`),
+  CONSTRAINT `ring_ibfk_1` FOREIGN KEY (`p_ring`) REFERENCES `ring` (`kd_ring`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1</sql_create_table>
+</table>
+<table name="user" view="colnames">
+<left>31</left>
+<top>284</top>
+<width>103</width>
+<height>163</height>
+<sql_create_table>CREATE TABLE `user` (
+  `kd_user` int(5) unsigned zerofill NOT NULL AUTO_INCREMENT,
+  `username` varchar(12) DEFAULT NULL,
+  `password` varchar(12) DEFAULT NULL,
+  `jns_user` int DEFAULT NULL,
+  `email` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`kd_user`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1</sql_create_table>
+</table>
+<table name="wk" view="colnames">
+<left>817</left>
+<top>106</top>
+<width>127</width>
+<height>197</height>
+<sql_create_table>CREATE TABLE `wk` (
+  `kd_wk` int NOT NULL AUTO_INCREMENT,
+  `kd_dpa` int NOT NULL,
+  `uraian` varchar(255) NOT NULL,
+  `s_uraian` varchar(255) DEFAULT NULL,
+  `kd_komponen` int NOT NULL,
+  `qty` int NOT NULL,
+  `kegiatan` int NOT NULL,
+  PRIMARY KEY (`kd_wk`),
+  KEY `kd_dpa` (`kd_dpa`),
+  KEY `kd_komponen` (`kd_komponen`),
+  CONSTRAINT `wk_ibfk_2` FOREIGN KEY (`kd_komponen`) REFERENCES `komponen` (`kd_komponen`),
+  CONSTRAINT `wk_ibfk_3` FOREIGN KEY (`kd_dpa`) REFERENCES `dpa` (`kd_dpa`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1</sql_create_table>
+</table>
+</tables>
+</canvas>
+</schemadesigner>
