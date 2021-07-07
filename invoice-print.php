@@ -1,6 +1,6 @@
 <?php
 include "cons.php";
-include "session.php";
+// include "session.php";
 ?>
 <head>
   <meta charset="utf-8">

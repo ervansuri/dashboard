@@ -54,7 +54,7 @@ try{
       <label class="col-sm-2 control-label">Kode DPA</label>
       <div class="col-sm-10">
           <select name="kd_ring" class="form-control">
-          <?php
+          <?php 
             include("cons2.php");
             $query = $pdo->prepare("SELECT kd_dpa,program,CONCAT('Rp ',fRupiah(jumlah)) AS jumlah,d.`year` FROM DPA d");
             $query->execute();
@@ -93,6 +93,8 @@ try{
     while($komponen = $query2->fetch()){
   ?>
   <!-- show data tables komponen -->
+
+
   <label class="col-sm-105 control-label"><?php echo $komponen['nama']?> Spesifikasi <?php echo $komponen['spec']?></label>
   <input type="hidden" name="data=[<?php echo $komponen['kd_komponen']?>][kd_komponen]">
     <div class="col-sm-10">

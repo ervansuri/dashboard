@@ -132,6 +132,48 @@
             </li>
             </ul>
           </li>
+          <li class="nav-item">
+            <a href="#" class="nav-link">
+              <i class="far fa-circle nav-icon"></i>
+              <p>
+                Rancangan Kerja dan Anggaran
+                <i class="fas fa-angle-left right"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="insert_rka.php" class="nav-link">
+                  <i class="nav-icon fas fa-edit"></i>
+                  <p>Tambah RKA</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="tabel_rka.php" class="nav-link">
+                  <i class="nav-icon fas fa-table"></i>
+                  <p>Daftar RKA</p>
+                </a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-item">
+            <a href="#" class="nav-link">
+              <i class="far fa-circle nav-icon"></i>
+              <p>
+                Reporting
+                <i class="fas fa-angle-left right"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="report.php" class="nav-link">
+                  <i class="nav-icon fas fa-edit"></i>
+                  <p>Print Report DPA</p>
+                </a>
+              </li>
+            </ul>
+          </li>
+          </ul>
+          </li>
       </nav>
       <!-- /.sidebar-menu -->
     </div>

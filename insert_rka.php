@@ -3,24 +3,24 @@ include "cons2.php";
 if($_SERVER["REQUEST_METHOD"] == "POST")
 {
 try{
-    $sql = "UPDATE t SET allocate = :allocate, foo = :foo, bar = :bar WHERE id = :id";
-    $stmt=$pdo->prepare($sql);
-    foreach ($_POST['data'] as $row)
+
+    foreach ($_POST['kd_komponen'] as $row)
     {
-      $stmt->execute($row);
+      if ($_POST['qty'][$row] == NULL) continue;
+      if ($_POST['kegiatan'][$row] == NULL) { 
+        echo "Kegiatan tidak boleh kosong pada komponen yang berkuantitas"; 
+        continue;
+      }
+      $query = $pdo->prepare("INSERT INTO wk VALUES (0,:dpa,:uraian,'',:kmp,:qty1,:kegiatan1)");
+      $datawk = array(
+          ':dpa' => $_POST['dpa'],
+          ':uraian' => $_POST['uraian'],
+          ':kmp' => $row,
+          ':qty1' => $_POST['qty'][$row],
+          ':kegiatan1' => $_POST['kegiatan'][$row],
+      );
+      $query->execute($datawk);
     }
-    $query = $pdo->prepare("INSERT INTO wk VALUES (0,:dpa,:uraian,'',:1,:qty1,:kegiatan1)");
-    $datawk = array(
-        ':dpa' => $_POST['dpa'],
-        ':uraian' => $_POST['uraian'],
-        ':1' => $_POST['1'],
-        ':qty1' => $_POST['qty1'],
-        ':kegiatan1' => $_POST['kegiatan1'],
-        ':2' => $_POST['2'],
-        ':qty1' => $_POST['qty1'],
-        ':kegiatan1' => $_POST['kegiatan1'],
-    );
-    $query->execute($datawk);
     echo "Data Detail RKA telah disimpan";
 }catch(PDOException $e){
     echo "Error! gagal menyimpan data Detail RKA:".$e->getMessage();  
@@ -65,7 +65,7 @@ try{
   <div class="form-group">
       <label class="col-sm-2 control-label">Kode DPA</label>
       <div class="col-sm-10">
-          <select name="kd_ring" class="form-control">
+          <select name="dpa" class="form-control">
           <?php
             include("cons2.php");
             $query = $pdo->prepare("SELECT kd_dpa,program,CONCAT('Rp ',fRupiah(jumlah)) AS jumlah,d.`year` FROM DPA d");
@@ -92,26 +92,33 @@ try{
       $kd_ring=$ring['kd_ring'];
   ?>
   <div class="form-group">
-  <div class="col-sm-10">
-  <!-- show data tables kd_ring -->
-    <label class="col-sm-10 control-label"><?php echo $ring['kd_ring']?> <?php echo $ring['nama']?></label>
-    <input type="hidden" name="kd_ring=[<?php echo $ring['kd_ring']?>]">
-  </div>
-  <!-- fetch data db komponen -->
   <?php
     include("cons2.php");
-    $query2 = $pdo->prepare("SELECT k.`kd_komponen`,k.`nama`, k.`spec`,k.`satuan`,r.`kd_ring` FROM komponen k LEFT JOIN komponen_ring kr ON k.`kd_komponen`=kr.`kd_komponen` LEFT JOIN ring r ON kr.`kd_ring`=r.`kd_ring` WHERE kr.`kd_ring`='$kd_ring'");
+    $query2 = $pdo->prepare("SELECT k.`kd_komponen`,k.`nama`, k.`spec`,k.`satuan`,r.`kd_ring` FROM komponen k JOIN komponen_ring kr ON k.`kd_komponen`=kr.`kd_komponen` LEFT JOIN ring r ON kr.`kd_ring`=r.`kd_ring` WHERE kr.`kd_ring`='$kd_ring'");
     $query2->execute();
-    while($komponen = $query2->fetch()){
+    if (!$query2->rowCount()) continue;
+    
   ?>
+  <div class="col-sm-10">
+  <!-- show data tables kd_ring -->
+    <label class="col-sm-10 control-label" style="font-size:30px; font-weight:bolder;"><?php echo $ring['kd_ring']?> <?php echo $ring['nama']?></label>
+    
+  </div>
+  <!-- fetch data db komponen -->
+  
+
+
+
   <!-- show data tables komponen -->
+  <?php while($komponen = $query2->fetch()) {?>
   <label class="col-sm-105 control-label"><?php echo $komponen['nama']?> Spesifikasi <?php echo $komponen['spec']?></label>
-  <input type="hidden" name="kd_komponen=[<?php echo $komponen['kd_komponen']?>]">
+  <input type="hidden" name="kd_komponen[<?php echo $komponen['kd_komponen']?>]" value="<?php echo $komponen['kd_komponen']?>">
+  <input type="hidden" name="kd_ring[<?php echo $komponen['kd_komponen']?>]" value="<?php echo $ring['kd_ring']?>">
     <div class="col-sm-10">
       <label class="col-sm-10">Qty</label>
-    <input type="text" name="qty=[<?php echo $komponen['kd_komponen']?>]" class="form-control" autocomplete="off">
+    <input type="text" name="qty[<?php echo $komponen['kd_komponen']?>]" class="form-control" autocomplete="off">
     <label class="col-sm-10">Kegiatan</label>
-    <input type="text" name="kegiatan=[<?php echo $komponen['kd_komponen']?>]" class="form-control" autocomplete="off">
+    <input type="text" name="kegiatan[<?php echo $komponen['kd_komponen']?>]" class="form-control" autocomplete="off">
     <br>
     </div>
     <?php }?>
